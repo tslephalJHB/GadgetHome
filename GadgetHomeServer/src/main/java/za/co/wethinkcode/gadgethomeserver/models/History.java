@@ -16,11 +16,11 @@ public class History {
 
     private String searchKeyword;
 
-    private Integer postId;
+    private Long postId;
 
     private LocalDate lastAccessed;
 
-    public History(User user, String searchKeyword, Integer postId) {
+    public History(User user, String searchKeyword, Long postId) {
         this.user = user;
         this.searchKeyword = searchKeyword;
         this.postId = postId;
@@ -55,11 +55,11 @@ public class History {
         this.searchKeyword = searchKeyword;
     }
 
-    public Integer getPostId() {
+    public Long getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(Long postId) {
         this.postId = postId;
     }
 

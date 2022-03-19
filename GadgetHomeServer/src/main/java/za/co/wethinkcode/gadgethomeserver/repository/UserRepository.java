@@ -6,4 +6,6 @@ import za.co.wethinkcode.gadgethomeserver.models.User;
 public interface UserRepository extends JpaRepository<User, String> {
 
     User findUserByUserName(String userName);
+
+    boolean existsByUserName(String userName);
 }
