@@ -1,4 +1,4 @@
-package za.co.wethinkcode.gadgethomeserver.unittests;
+package za.co.wethinkcode.gadgethomeserver.models;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

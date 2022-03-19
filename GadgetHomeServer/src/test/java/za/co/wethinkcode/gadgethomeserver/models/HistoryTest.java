@@ -1,4 +1,4 @@
-package za.co.wethinkcode.gadgethomeserver.unittests;
+package za.co.wethinkcode.gadgethomeserver.models;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ public class HistoryTest {
     @Test
     void historyTest() {
         User user = new User("tshiamo", "password");
-        History history = new History(user, "s21", 1);
+        History history = new History(user, "s21", 1L);
 
         Assertions.assertThat(history.getUser().getUserName()).isEqualTo("tshiamo");
         Assertions.assertThat(history.getSearchKeyword()).isEqualTo("s21");
