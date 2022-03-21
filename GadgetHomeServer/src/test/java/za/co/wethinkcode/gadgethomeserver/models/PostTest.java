@@ -33,7 +33,7 @@ class PostTest {
         user.setPassword("iloveyou");
         user.setRole("Role");
         user.setUserName("janedoe");
-        Post actualPost = new Post("Device", "Model", "Brand", user);
+        Post actualPost = new Post("Device", "Model", "Brand", user, 1.00);
 
         assertEquals("Brand", actualPost.getBrand());
         assertSame(user, actualPost.getOwner());

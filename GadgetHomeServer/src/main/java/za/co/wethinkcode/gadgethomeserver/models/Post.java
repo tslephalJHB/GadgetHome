@@ -22,12 +22,14 @@ public class Post {
 
     private String description;
     private boolean available;
+    private Double amount;
 
-    public Post(String device, String model, String brand, User owner) {
+    public Post(String device, String model, String brand, User owner, Double amount) {
         this.device = device;
         this.model = model;
         this.brand = brand;
         this.owner = owner;
+        this.amount = amount;
         this.datePosted = LocalDate.now();
     }
 

@@ -1,8 +1,6 @@
 package za.co.wethinkcode.gadgethomeserver.models;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class User {
@@ -18,9 +16,6 @@ public class User {
     private String lastName;
 
     private String role;
-
-    @OneToMany(mappedBy = "user")
-    private final Set<Post> history = new HashSet<>();
 
     public User() {
     }
@@ -77,13 +72,5 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public Set<Post> getHistory() {
-        return history;
-    }
-
-    public void addPostToHistory(Post post) {
-        history.add(post);
     }
 }

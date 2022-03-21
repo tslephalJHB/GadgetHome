@@ -69,12 +69,13 @@ public class PostsController {
                 map.get("device"),
                 map.get("model"),
                 map.get("brand"),
-                user
+                user,
+                Double.parseDouble(map.get("amount"))
         ));
     }
 
     @PutMapping("/post/{id}")
-    public void updatePost(@PathVariable Post post) {
+    public void updatePost(@PathVariable String id, @RequestBody Post post) {
         Authentication authentication = SecurityContextHolder
                 .getContext().getAuthentication();
         String username = authentication.getName();
