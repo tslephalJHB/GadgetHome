@@ -20,7 +20,7 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "user")
-    private Set<History> histories = new HashSet<>();
+    private final Set<Post> history = new HashSet<>();
 
     public User() {
     }
@@ -77,5 +77,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Post> getHistory() {
+        return history;
+    }
+
+    public void addPostToHistory(Post post) {
+        history.add(post);
     }
 }

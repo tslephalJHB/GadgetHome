@@ -17,7 +17,7 @@ public class PostsService {
         return postRepo.findAll();
     }
 
-    public Post getPost(Integer id) {
+    public Post getPost(Long id) {
         return postRepo.getById(id);
     }
 
@@ -26,10 +26,9 @@ public class PostsService {
     }
 
     public void updatePost(Post post) {
-        Post postDb = postRepo.getById(Math.toIntExact(post.getId()));
-
-        postDb.setAvailable(false);
-        postRepo.save(postDb);
+        Post postDb = postRepo.getById(post.getId());
+        postRepo.delete(postDb);
+        postRepo.save(post);
     }
 
     public void deletePost(Post post) {

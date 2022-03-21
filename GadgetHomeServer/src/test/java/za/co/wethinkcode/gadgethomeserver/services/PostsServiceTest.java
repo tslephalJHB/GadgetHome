@@ -54,7 +54,7 @@ class PostsServiceTest {
         //   getPost(Integer).
         //   See https://diff.blue/R013 to resolve this issue.
 
-        this.postsService.getPost(1);
+        this.postsService.getPost(1L);
     }
 
     @Test

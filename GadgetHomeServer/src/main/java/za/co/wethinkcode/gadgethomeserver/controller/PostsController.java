@@ -9,7 +9,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 import za.co.wethinkcode.gadgethomeserver.models.Post;
 import za.co.wethinkcode.gadgethomeserver.models.User;
-import za.co.wethinkcode.gadgethomeserver.repository.HistoryRepository;
 import za.co.wethinkcode.gadgethomeserver.repository.UserRepository;
 import za.co.wethinkcode.gadgethomeserver.services.PostsService;
 
@@ -24,12 +23,10 @@ import java.util.Map;
 @RequestMapping("/ads")
 public class PostsController {
 
-    HistoryRepository historyRepo;
     UserRepository userRepo;
     PostsService postsService = new PostsService();
 
-    public PostsController(HistoryRepository historyRepository, UserRepository userRepository) {
-        this.historyRepo = historyRepository;
+    public PostsController(UserRepository userRepository) {
         this.userRepo = userRepository;
     }
 
@@ -39,7 +36,7 @@ public class PostsController {
     }
 
     @GetMapping("/posts/id/{id}")
-    public Post getPost(@PathVariable Integer id) {
+    public Post getPost(@PathVariable Long id) {
         try {
             return postsService.getPost(id);
         } catch (RestClientException e) {
