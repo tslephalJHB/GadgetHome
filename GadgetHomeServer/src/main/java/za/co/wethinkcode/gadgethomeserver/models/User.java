@@ -15,6 +15,8 @@ public class User {
 
     private String lastName;
 
+    private String number;
+
     private String role;
 
     public User() {
@@ -39,6 +41,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getPassword() {

@@ -23,16 +23,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Gadget Home',
       theme: ThemeData(
-        primaryColor: const Color(0xFF2661FA),
+        primaryColor: Colors.orange,
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: <String, WidgetBuilder>{
         MAIN_UI: (BuildContext context) => const HomePage(),
         LOGIN_SCREEN: (BuildContext context) => const LoginScreen(),
-        REGISTRATION_SCREEN: (BuildContext context) => RegisterScreen(),
+        REGISTRATION_SCREEN: (BuildContext context) => const RegisterScreen(),
         SPLASH_SCREEN: (BuildContext context) => const AnimatedSplashScreen(),
       },
       initialRoute: LOGIN_SCREEN,

@@ -54,24 +54,28 @@ public class PostsController {
     }
 
     @PostMapping("/posts")
-    public void addPost(@RequestBody Map<String, String> map) throws JsonProcessingException {
+    public Post addPost(@RequestBody Map<String, String> map) {
+        System.out.println(map);
+        System.out.println(map.get("brand"));
         Authentication authentication = SecurityContextHolder
                 .getContext().getAuthentication();
-        String username = authentication.getName();
 
-        if(!userRepo.existsByUserName(username)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
+        if (!authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User does not exist");
         }
 
-        User user = userRepo.findUserByUserName(username);
+        User user = userRepo.findUserByUserName(authentication.getName());
 
-        postsService.addPost(new Post(
+        Post post = new Post(
                 map.get("device"),
                 map.get("model"),
                 map.get("brand"),
                 user,
-                Double.parseDouble(map.get("amount"))
-        ));
+                Double.parseDouble(map.get("amount")));
+
+        System.out.println(post);
+
+        return postsService.addPost(post);
     }
 
     @PutMapping("/post/{id}")
@@ -80,12 +84,11 @@ public class PostsController {
                 .getContext().getAuthentication();
         String username = authentication.getName();
 
-        if(!userRepo.existsByUserName(username)){
+        if (!userRepo.existsByUserName(username)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
         }
 
         postsService.updatePost(post);
     }
-
 
 }

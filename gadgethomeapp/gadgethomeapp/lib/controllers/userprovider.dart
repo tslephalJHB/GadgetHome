@@ -16,6 +16,7 @@ class UserProvider extends ChangeNotifier {
       response.addAll(value);
 
       if (response["error"] == "false" && response["message"] == "Logged In") {
+        user = User.fromJson(response["user"]);
         token = response["token"];
         return true;
       }
@@ -29,7 +30,8 @@ class UserProvider extends ChangeNotifier {
     return register(user).then((value) {
       response.addAll(value);
 
-      if (response["error"] == "false" && response["message"] == "Logged In") {
+      if (response["error"] == "false" &&
+          response["message"] == "Account created successfully") {
         token = response["token"];
         return true;
       }

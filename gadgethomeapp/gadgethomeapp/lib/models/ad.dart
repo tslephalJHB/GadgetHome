@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gadgethomeapp/models/user.dart';
@@ -12,10 +14,14 @@ class Ad {
   String location;
   double price;
   User seller;
-  List<Image> images;
+  List<Uint8List> images = [];
 
   Ad(this.id, this.datePosted, this.model, this.brand, this.device,
-      this.description, this.location, this.price, this.seller, this.images);
+      this.description, this.location, this.price, this.seller);
+
+  void addImage(Uint8List image) {
+    images.add(image);
+  }
 
   factory Ad.fromJson(Map<String, dynamic> json) {
     return Ad(
@@ -27,8 +33,7 @@ class Ad {
         json['description'],
         json['location'],
         json['price'],
-        json['postedBy'],
-        json['images']);
+        json['postedBy']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -40,8 +45,7 @@ class Ad {
         'description': description,
         'location': location,
         'price': price,
-        'postedBy': seller,
-        'images': images
+        'postedBy': seller
       };
 
   Widget build(BuildContext context) {
@@ -61,7 +65,7 @@ class Ad {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  brand.toUpperCase() + " " + model,
+                  "${brand.toUpperCase()} $model",
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: _height / 40),
                 ),
@@ -168,7 +172,12 @@ class Ad {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.all(10),
-                child: images[0]),
+                child: Image.memory(
+                  images[0],
+                  fit: BoxFit.cover,
+                  height: _height / 4,
+                  width: _width / 4,
+                )),
           ],
         ),
       ),

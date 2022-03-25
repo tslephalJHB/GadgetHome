@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gadgethomeapp/component/adcard.dart';
 import 'package:gadgethomeapp/component/customshape.dart';
 import 'package:gadgethomeapp/controllers/userprovider.dart';
 import 'package:gadgethomeapp/models/ad.dart';
@@ -86,20 +85,11 @@ class _HomePageState extends State<HomePage> {
   Widget builAd(BuildContext context, int index, List<Ad> listItem) {
     Ad ad = listItem[index];
     return GestureDetector(
-      onTap: () {
-        //Navigator.of(context).pushNamed(DETAIL_UI);
-        print("Routing to detail page");
-      },
-      child: AdCard(
-        "${ad.brand} ${ad.model}",
-        "R${ad.price}",
-        "${ad.datePosted}",
-        ad.device,
-        ad.description,
-        ad.images[0],
-        ad.location,
-      ),
-    );
+        onTap: () {
+          //Navigator.of(context).pushNamed(DETAIL_UI);
+          print("Routing to detail page");
+        },
+        child: ad.build(context));
   }
 
   Widget buildAdsList(List<Ad> ads) {
@@ -112,7 +102,13 @@ class _HomePageState extends State<HomePage> {
         itemCount: ads.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, index) {
-          return builAd(context, index, ads);
+          Ad ad = ads[index];
+          return GestureDetector(
+              onTap: () {
+                //Navigator.of(context).pushNamed(DETAIL_UI);
+                print("Routing to detail page");
+              },
+              child: ad.build(context));
         },
       ),
     );

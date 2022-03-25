@@ -21,7 +21,8 @@ public class OrderService {
         orderRepo.save(order);
     }
 
-    public void trackOrder(Order order) {
-
+    public String trackOrder(String id) {
+        Order order = orderRepo.getById(Long.valueOf(id));
+        return order.getTransit();
     }
 }

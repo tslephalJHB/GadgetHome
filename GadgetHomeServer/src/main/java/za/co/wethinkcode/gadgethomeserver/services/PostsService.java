@@ -35,7 +35,8 @@ public class PostsService {
         postRepo.delete(post);
     }
 
-    public void addPost(Post post) {
-        postRepo.save(post);
+    public Post addPost(Post post) {
+        System.out.println(post);
+        return postRepo.save(post);
     }
 }

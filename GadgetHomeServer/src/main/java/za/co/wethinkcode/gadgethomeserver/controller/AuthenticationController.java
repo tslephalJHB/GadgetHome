@@ -59,6 +59,7 @@ public class AuthenticationController {
                 responseMap.put("error", false);
                 responseMap.put("message", "Logged In");
                 responseMap.put("token", token);
+                responseMap.put("user", userRepository.findUserByUserName(username));
                 return ResponseEntity.ok(responseMap);
             } else {
                 responseMap.put("error", true);
@@ -107,6 +108,7 @@ public class AuthenticationController {
             responseMap.put("error", false);
             responseMap.put("username", userName);
             responseMap.put("message", "Account created successfully");
+            responseMap.put("user", userRepository.findUserByUserName(userName));
             responseMap.put("token", token);
 
         } catch (SQLGrammarException e) {

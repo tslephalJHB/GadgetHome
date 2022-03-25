@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:gadgethomeapp/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -41,7 +42,7 @@ Future<Map> register(User user) async {
 }
 
 Future<List<Ad>> getAds() async {
-  final response = await http.get(
+  var response = await http.get(
     Uri.parse(API_URL + '/ads/posts'),
     headers: {
       HttpHeaders.authorizationHeader: 'authorization',
@@ -54,8 +55,13 @@ Future<List<Ad>> getAds() async {
     List adsList = jsonDecode(response.body);
     List<Ad> ads = [];
 
-    for (var ad in adsList) {
-      ads.add(Ad.fromJson(ad));
+    for (int i = 0; i < adsList.length; ++i) {
+      ads.add(Ad.fromJson(adsList[i]));
+
+      response = await http.get(Uri.parse("$API_URL/images/${ads[i].id}"));
+
+      Uint8List image = jsonDecode(response.body);
+      ads[i].addImage(image);
     }
 
     return ads;
@@ -65,7 +71,7 @@ Future<List<Ad>> getAds() async {
 }
 
 Future<List<Ad>> getAdsByKeyword(String keyword) async {
-  final response = await http.get(
+  var response = await http.get(
     Uri.parse(API_URL + '/ads/posts/key/' + keyword),
     headers: {
       HttpHeaders.authorizationHeader: 'authorization',
@@ -78,8 +84,13 @@ Future<List<Ad>> getAdsByKeyword(String keyword) async {
     List adsList = jsonDecode(response.body);
     List<Ad> ads = [];
 
-    for (var ad in adsList) {
-      ads.add(Ad.fromJson(ad));
+    for (int i = 0; i < adsList.length; ++i) {
+      ads.add(Ad.fromJson(adsList[i]));
+
+      response = await http.get(Uri.parse("$API_URL/images/${ads[i].id}"));
+
+      Uint8List image = jsonDecode(response.body);
+      ads[i].addImage(image);
     }
 
     return ads;
@@ -89,7 +100,7 @@ Future<List<Ad>> getAdsByKeyword(String keyword) async {
 }
 
 Future<Ad> getAd(int id) async {
-  final response = await http.get(
+  var response = await http.get(
     Uri.parse(API_URL + '/ads/posts/id/' + id.toString()),
     headers: {
       HttpHeaders.authorizationHeader: 'authorization',
@@ -102,6 +113,15 @@ Future<Ad> getAd(int id) async {
   if (response.statusCode == 200) {
     ad = Ad.fromJson(jsonDecode(response.body));
 
+    response =
+        await http.get(Uri.parse(API_URL + '/images/images/' + id.toString()));
+
+    List<Uint8List> images = jsonDecode(response.body);
+
+    for (Uint8List image in images) {
+      ad.addImage(image);
+    }
+
     return ad;
   } else {
     throw Exception('Failed to load ad');
@@ -109,14 +129,25 @@ Future<Ad> getAd(int id) async {
 }
 
 Future<bool> addPost(Ad ad, String token) async {
-  final response = await http.post(Uri.parse(API_URL + '/ads/posts'),
+  var response = await http.post(Uri.parse("$API_URL/ads/posts"),
       headers: {
-        HttpHeaders.authorizationHeader: "bearer \n$token",
+        HttpHeaders.authorizationHeader: "bearer $token",
         "Content-Type": "application/json"
       },
       body: jsonEncode(ad.toJson()));
 
   print(response.body);
+
+  // Ad adResponse = Ad.fromJson(jsonDecode(response.body));
+
+  // for (Uint8List image in ad.images) {
+  //   response = await http.post(Uri.parse("$API_URL/images/posts"),
+  //       headers: {
+  //         HttpHeaders.authorizationHeader: "bearer $token",
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: jsonEncode(image));
+  // }
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
