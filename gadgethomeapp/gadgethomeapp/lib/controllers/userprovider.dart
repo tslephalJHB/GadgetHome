@@ -46,4 +46,23 @@ class UserProvider extends ChangeNotifier {
     });
     return ads;
   }
+
+  List<Ad> getAdsByKey(String keyword) {
+    List<Ad> ads = [];
+    getAdsByKeyword(keyword).then((value) {
+      for (var ad in value) {
+        ads.add(ad);
+      }
+    });
+    return ads;
+  }
+
+  Ad? getAdId(int id) {
+    Ad? ad;
+    getAd(id).then((value) {
+      ad = value;
+    });
+
+    return ad;
+  }
 }
