@@ -11,10 +11,10 @@ import java.util.List;
 
 @Service
 public class PictureService {
-    private PictureRepository pictureRepo;
+    private final PictureRepository pictureRepo;
 
-    public PictureService() {
-
+    public PictureService(PictureRepository pictureRepo) {
+        this.pictureRepo = pictureRepo;
     }
 
     public void addImage(MultipartFile image, Post post) {
@@ -28,8 +28,8 @@ public class PictureService {
     public List<Picture> getImages(Post post) {
         return pictureRepo.getByPost(post);
     }
-
-    public Picture getImage(Long id){
-        return pictureRepo.getById(id);
-    }
+//
+//    public Picture getImage(Long id){
+//        return pictureRepo.getById(id);
+//    }
 }

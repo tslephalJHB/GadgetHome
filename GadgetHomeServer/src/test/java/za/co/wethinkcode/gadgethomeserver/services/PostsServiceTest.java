@@ -94,7 +94,7 @@ class PostsServiceTest {
         post.setAvailable(true);
         post.setDescription("The characteristics of someone or something");
         post.setId(123L);
-        this.postsService.updatePost(post);
+        this.postsService.updatePost(post.getId(), post);
     }
 
     @Test
@@ -120,7 +120,7 @@ class PostsServiceTest {
         post.setAvailable(true);
         post.setDescription("The characteristics of someone or something");
         post.setId(123L);
-        this.postsService.updatePost(post);
+        this.postsService.updatePost(post.getId(), post);
     }
 
     @Test
@@ -147,7 +147,7 @@ class PostsServiceTest {
         post.setAvailable(true);
         post.setDescription("The characteristics of someone or something");
         post.setId(123L);
-        this.postsService.updatePost(post);
+        this.postsService.updatePost(post.getId(), post);
     }
 
     @Test

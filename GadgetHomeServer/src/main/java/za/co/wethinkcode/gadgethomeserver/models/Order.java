@@ -6,30 +6,40 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 
 @Entity
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private final Post post;
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "bought_by_user_name")
-    private final User buyer;
+    private User buyer;
 
     private String transit;
     private String trackId;
 
+    private final LocalDate boughtDate;
     private boolean paymentReleased;
 
     public Order(User buyer, Post post) {
         this.buyer = buyer;
         this.post = post;
         post.setAvailable(false);
+        this.transit = "Seller Hasn't Posted";
+        this.boughtDate = LocalDate.now();
+        this.paymentReleased = false;
+    }
+
+    public Order() {
+        this.boughtDate = LocalDate.now();
+        this.paymentReleased = false;
     }
 
     public String getTrackId() {
@@ -71,5 +81,9 @@ public class Order {
     public Order setPaymentReleased(boolean paymentReleased) {
         this.paymentReleased = paymentReleased;
         return this;
+    }
+
+    public LocalDate getBoughtDate() {
+        return boughtDate;
     }
 }

@@ -1,6 +1,5 @@
 package za.co.wethinkcode.gadgethomeserver.models;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,8 +11,7 @@ import java.time.LocalDate;
 @Entity
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "serial")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String model;
@@ -29,17 +27,39 @@ public class Post {
     private boolean available;
     private Double amount;
 
-    public Post(String device, String model, String brand, User owner, Double amount) {
+    public Post(String device, String model, String brand, String description, User owner, Double amount) {
         this.device = device;
         this.model = model;
         this.brand = brand;
         this.owner = owner;
+        this.description = description;
         this.amount = amount;
+        this.available = true;
         this.datePosted = LocalDate.now();
     }
 
     public Post() {
 
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void setDatePosted(LocalDate datePosted) {
+        this.datePosted = datePosted;
     }
 
     public void setId(Long id) {

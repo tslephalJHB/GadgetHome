@@ -8,9 +8,11 @@ import java.util.List;
 
 @Service
 public class PostsService {
-    private PostRepository postRepo;
 
-    public PostsService() {
+    private final PostRepository postRepo;
+
+    public PostsService(PostRepository postRepository) {
+        this.postRepo = postRepository;
     }
 
     public List<Post> getPosts() {
@@ -25,10 +27,10 @@ public class PostsService {
         return postRepo.findByModelOrBrandOrDevice(keyword, keyword, keyword);
     }
 
-    public void updatePost(Post post) {
-        Post postDb = postRepo.getById(post.getId());
+    public Post updatePost(Long id, Post post) {
+        Post postDb = postRepo.getById(id);
         postRepo.delete(postDb);
-        postRepo.save(post);
+        return postRepo.save(post);
     }
 
     public void deletePost(Post post) {
@@ -36,7 +38,6 @@ public class PostsService {
     }
 
     public Post addPost(Post post) {
-        System.out.println(post);
         return postRepo.save(post);
     }
 }

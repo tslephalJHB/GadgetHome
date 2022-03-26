@@ -1,6 +1,5 @@
 package za.co.wethinkcode.gadgethomeserver.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,14 +22,16 @@ import java.util.Map;
 @RequestMapping("/images")
 public class PictureController {
 
-    @Autowired
-    private PictureService service;
+    private final PictureService service;
+    private final PostsService postsService;
 
-    @Autowired
-    private PostsService postsService;
+    public PictureController(PostsService postsService, PictureService pictureService) {
+        this.service = pictureService;
+        this.postsService = postsService;
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getImage(@PathVariable String id) throws Exception {
+    public ResponseEntity<byte[]> getImage(@PathVariable String id) {
         Post post = postsService.getPost(Long.valueOf(id));
 
         HttpHeaders headers = new HttpHeaders();
@@ -38,7 +39,7 @@ public class PictureController {
 
         Picture image = service.getImages(post).get(0);
 
-        return new ResponseEntity<byte[]>(image.getImage(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(image.getImage(), headers, HttpStatus.OK);
     }
 
     @GetMapping("/images/{id}")
@@ -50,14 +51,14 @@ public class PictureController {
         List<ResponseEntity<byte[]>> responses = new ArrayList<>();
 
         for(Picture image: service.getImages(post)){
-            responses.add(new ResponseEntity<byte[]>(image.getImage(), headers, HttpStatus.OK));
+            responses.add(new ResponseEntity<>(image.getImage(), headers, HttpStatus.OK));
         }
         return responses;
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<Map<String, String>>
-    uploadPictures(@PathVariable String id, @RequestBody List<MultipartFile> images) {
+    uploadPicture(@PathVariable String id, @RequestPart("MultipartFile") MultipartFile image) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Post post = postsService.getPost(Long.valueOf(id));
@@ -67,11 +68,9 @@ public class PictureController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authorized");
         }
 
-        for (MultipartFile image : images) {
-            service.addImage(image, post);
-        }
+        service.addImage(image, post);
 
-        return new ResponseEntity<Map<String, String>>(
+        return new ResponseEntity<>(
                 Map.of("message", "successful"),
                 new HttpHeaders(),
                 HttpStatus.OK

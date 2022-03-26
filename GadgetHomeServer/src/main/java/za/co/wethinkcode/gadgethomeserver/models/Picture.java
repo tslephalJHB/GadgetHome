@@ -9,7 +9,7 @@ import java.io.IOException;
 @Entity
 public class Picture {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String fileName;
@@ -27,11 +27,11 @@ public class Picture {
     private Post post;
 
     public Picture(MultipartFile file, Post post) throws IOException {
+        this.post = post;
+        this.image = file.getBytes();
         this.fileName = file.getOriginalFilename();
         this.fileType = file.getContentType();
         this.size = file.getSize();
-        this.image = file.getBytes();
-        this.post = post;
     }
 
     public Picture(String fileName, String fileType, long size, byte[] image, Post post) {
@@ -40,6 +40,10 @@ public class Picture {
         this.size = size;
         this.image = image;
         this.post = post;
+    }
+
+    public Picture() {
+
     }
 
     public String getFileName() {

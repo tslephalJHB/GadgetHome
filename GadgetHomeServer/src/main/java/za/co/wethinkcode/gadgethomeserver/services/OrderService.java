@@ -1,24 +1,27 @@
 package za.co.wethinkcode.gadgethomeserver.services;
 
+import org.springframework.stereotype.Service;
 import za.co.wethinkcode.gadgethomeserver.models.Order;
 import za.co.wethinkcode.gadgethomeserver.repository.OrderRepository;
 
+@Service
 public class OrderService {
 
-    private OrderRepository orderRepo;
+    private final OrderRepository orderRepo;
 
-    public OrderService() {
+    public OrderService(OrderRepository orderRepo) {
+        this.orderRepo = orderRepo;
     }
 
     public void addOrder(Order order) {
         orderRepo.save(order);
     }
 
-    public void orderRecieved(Order order) {
+    public Order orderRecieved(Order order) {
         order.setTransit("Delivered");
         order.setPaymentReleased(true);
         orderRepo.deleteById(order.getId());
-        orderRepo.save(order);
+        return orderRepo.save(order);
     }
 
     public String trackOrder(String id) {
