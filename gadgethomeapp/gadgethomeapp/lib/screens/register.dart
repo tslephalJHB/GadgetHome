@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gadgethomeapp/component/background.dart';
-import 'package:gadgethomeapp/constants/constants.dart';
-import 'package:gadgethomeapp/controllers/userprovider.dart';
-import 'package:gadgethomeapp/models/user.dart';
+import 'package:gadgethome/component/background.dart';
+import 'package:gadgethome/constants/constants.dart';
+import 'package:gadgethome/controllers/userprovider.dart';
+import 'package:gadgethome/models/user.dart';
 import 'package:provider/src/provider.dart';
 
 class RegisterScreen extends StatefulWidget {

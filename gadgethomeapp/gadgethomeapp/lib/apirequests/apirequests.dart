@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:gadgethomeapp/models/user.dart';
+import 'package:gadgethome/constants/constants.dart';
+import 'package:gadgethome/models/ad.dart';
+import 'package:gadgethome/models/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:gadgethomeapp/constants/constants.dart';
-import 'package:gadgethomeapp/models/ad.dart';
 
 Future<Map> login(String username, String password) async {
   final response = await http.post(Uri.parse(API_URL + '/auth/login'),
@@ -41,11 +41,11 @@ Future<Map> register(User user) async {
   }
 }
 
-Future<List<Ad>> getAds() async {
+Future<List<Ad>> getAds(String token) async {
   var response = await http.get(
     Uri.parse(API_URL + '/ads/posts'),
     headers: {
-      HttpHeaders.authorizationHeader: 'authorization',
+      HttpHeaders.authorizationHeader: "Bearer $token",
     },
   );
 
@@ -58,7 +58,12 @@ Future<List<Ad>> getAds() async {
     for (int i = 0; i < adsList.length; ++i) {
       ads.add(Ad.fromJson(adsList[i]));
 
-      response = await http.get(Uri.parse("$API_URL/images/${ads[i].id}"));
+      response = await http.get(
+        Uri.parse("$API_URL/images/${ads[i].id}"),
+        headers: {
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+      );
 
       Uint8List image = jsonDecode(response.body);
       ads[i].addImage(image);
@@ -70,15 +75,16 @@ Future<List<Ad>> getAds() async {
   }
 }
 
-Future<List<Ad>> getAdsByKeyword(String keyword) async {
+Future<List<Ad>> getAdsByKeyword(String keyword, String token) async {
+  print("getting ads: $keyword");
   var response = await http.get(
     Uri.parse(API_URL + '/ads/posts/key/' + keyword),
     headers: {
-      HttpHeaders.authorizationHeader: 'authorization',
+      HttpHeaders.authorizationHeader: "Bearer $token",
     },
   );
 
-  print(response);
+  print(response.body);
 
   if (response.statusCode == 200) {
     List adsList = jsonDecode(response.body);
@@ -87,11 +93,17 @@ Future<List<Ad>> getAdsByKeyword(String keyword) async {
     for (int i = 0; i < adsList.length; ++i) {
       ads.add(Ad.fromJson(adsList[i]));
 
-      response = await http.get(Uri.parse("$API_URL/images/${ads[i].id}"));
+      response = await http.get(
+        Uri.parse("$API_URL/images/${ads[i].id}"),
+        headers: {
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+      );
 
       Uint8List image = jsonDecode(response.body);
       ads[i].addImage(image);
     }
+    print(ads.length);
 
     return ads;
   } else {
@@ -99,11 +111,11 @@ Future<List<Ad>> getAdsByKeyword(String keyword) async {
   }
 }
 
-Future<Ad> getAd(int id) async {
+Future<Ad> getAd(int id, String token) async {
   var response = await http.get(
     Uri.parse(API_URL + '/ads/posts/id/' + id.toString()),
     headers: {
-      HttpHeaders.authorizationHeader: 'authorization',
+      HttpHeaders.authorizationHeader: "Bearer $token",
     },
   );
   Ad ad;
@@ -113,8 +125,12 @@ Future<Ad> getAd(int id) async {
   if (response.statusCode == 200) {
     ad = Ad.fromJson(jsonDecode(response.body));
 
-    response =
-        await http.get(Uri.parse(API_URL + '/images/images/' + id.toString()));
+    response = await http.get(
+      Uri.parse(API_URL + '/images/images/' + id.toString()),
+      headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
 
     List<Uint8List> images = jsonDecode(response.body);
 
@@ -131,7 +147,7 @@ Future<Ad> getAd(int id) async {
 Future<bool> addPost(Ad ad, String token) async {
   var response = await http.post(Uri.parse("$API_URL/ads/posts"),
       headers: {
-        HttpHeaders.authorizationHeader: "bearer $token",
+        HttpHeaders.authorizationHeader: "Bearer $token",
         "Content-Type": "application/json"
       },
       body: jsonEncode(ad.toJson()));
@@ -143,7 +159,7 @@ Future<bool> addPost(Ad ad, String token) async {
   // for (Uint8List image in ad.images) {
   //   response = await http.post(Uri.parse("$API_URL/images/posts"),
   //       headers: {
-  //         HttpHeaders.authorizationHeader: "bearer $token",
+  //         HttpHeaders.authorizationHeader: "Bearer $token",
   //         "Content-Type": "application/json"
   //       },
   //       body: jsonEncode(image));

@@ -1,27 +1,36 @@
 import 'package:flutter/cupertino.dart';
-import 'package:gadgethomeapp/apirequests/apirequests.dart';
-import 'package:gadgethomeapp/models/ad.dart';
-import 'package:gadgethomeapp/models/user.dart';
+import 'package:gadgethome/apirequests/apirequests.dart';
+import 'package:gadgethome/constants/constants.dart';
+import 'package:gadgethome/models/ad.dart';
+import 'package:gadgethome/models/user.dart';
 
 class UserProvider extends ChangeNotifier {
   late User user;
+
   late String token;
-  late Future<bool> loggedIn;
+
+  Map<String, List<Ad>> ads = {};
   Map response = {};
+
+  bool loggedIn = false;
 
   UserProvider();
 
-  Future<bool> loginUser(String username, String password) {
-    return login(username, password).then((value) {
+  void loginUser(String username, String password) {
+    login(username, password).then((value) {
       response.addAll(value);
 
-      if (response["error"] == "false" && response["message"] == "Logged In") {
+      if (response["error"] == false && response["message"] == "Logged In") {
         user = User.fromJson(response["user"]);
         token = response["token"];
-        return true;
+        print("Logged in");
+        loggedIn = true;
+      } else {
+        print("Login failed");
+        loggedIn = false;
       }
-      return false;
     });
+    notifyListeners();
   }
 
   Future<bool> registerUser(User user) {
@@ -33,15 +42,17 @@ class UserProvider extends ChangeNotifier {
       if (response["error"] == "false" &&
           response["message"] == "Account created successfully") {
         token = response["token"];
+        loggedIn = true;
         return true;
       }
+      loggedIn = false;
       return false;
     });
   }
 
   List<Ad> getAllAds() {
     List<Ad> ads = [];
-    getAds().then((value) {
+    getAds(token).then((value) {
       for (var ad in value) {
         ads.add(ad);
       }
@@ -49,19 +60,21 @@ class UserProvider extends ChangeNotifier {
     return ads;
   }
 
-  List<Ad> getAdsByKey(String keyword) {
-    List<Ad> ads = [];
-    getAdsByKeyword(keyword).then((value) {
+  Future<List<Ad>> getAdsByKey(String keyword) async {
+    List<Ad> adsList = [];
+    getAdsByKeyword(keyword, token).then((value) {
       for (var ad in value) {
-        ads.add(ad);
+        adsList.add(ad);
       }
+      ads.addAll({keyword: adsList});
+      notifyListeners();
     });
-    return ads;
+    return adsList;
   }
 
   Ad? getAdId(int id) {
     Ad? ad;
-    getAd(id).then((value) {
+    getAd(id, token).then((value) {
       ad = value;
     });
 

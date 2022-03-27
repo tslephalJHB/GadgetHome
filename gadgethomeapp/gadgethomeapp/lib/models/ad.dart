@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:gadgethomeapp/models/user.dart';
+import 'package:gadgethome/models/user.dart';
 
 class Ad {
   int id;

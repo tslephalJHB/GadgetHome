@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gadgethomeapp/constants/constants.dart';
-import 'package:gadgethomeapp/controllers/userprovider.dart';
-import 'package:gadgethomeapp/screens/homepage.dart';
-import 'package:gadgethomeapp/screens/login.dart';
-import 'package:gadgethomeapp/screens/register.dart';
-import 'package:gadgethomeapp/screens/splashscreen.dart';
+import 'package:gadgethome/constants/constants.dart';
+import 'package:gadgethome/controllers/userprovider.dart';
+import 'package:gadgethome/screens/homepage.dart';
+import 'package:gadgethome/screens/login.dart';
+import 'package:gadgethome/screens/register.dart';
+import 'package:gadgethome/screens/splashscreen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         REGISTRATION_SCREEN: (BuildContext context) => const RegisterScreen(),
         SPLASH_SCREEN: (BuildContext context) => const AnimatedSplashScreen(),
       },
-      initialRoute: LOGIN_SCREEN,
+      initialRoute: SPLASH_SCREEN,
     );
   }
 }

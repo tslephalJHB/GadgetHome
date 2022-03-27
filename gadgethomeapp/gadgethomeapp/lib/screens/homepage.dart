@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gadgethomeapp/component/customshape.dart';
-import 'package:gadgethomeapp/controllers/userprovider.dart';
-import 'package:gadgethomeapp/models/ad.dart';
+import 'package:gadgethome/component/customshape.dart';
+import 'package:gadgethome/controllers/userprovider.dart';
+import 'package:gadgethome/models/ad.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -92,25 +93,45 @@ class _HomePageState extends State<HomePage> {
         child: ad.build(context));
   }
 
-  Widget buildAdsList(List<Ad> ads) {
-    return Container(
-      height: _height / 4.25,
-      //width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-        padding: const EdgeInsets.all(5),
-        shrinkWrap: true,
-        itemCount: ads.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (BuildContext context, index) {
-          Ad ad = ads[index];
-          return GestureDetector(
-              onTap: () {
-                //Navigator.of(context).pushNamed(DETAIL_UI);
-                print("Routing to detail page");
-              },
-              child: ad.build(context));
-        },
-      ),
+  Widget buildAdsList(String keyword) {
+    return FutureBuilder(
+      future:
+          Provider.of<UserProvider>(context, listen: true).getAdsByKey(keyword),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          if (snapshot.error != null) {
+            return const Center(
+              child: Text("Failed to load"),
+            );
+          } else {
+            return SizedBox(
+              height: _height / 4.25,
+              child: Consumer<UserProvider>(
+                builder: (context, controller, child) => ListView.builder(
+                  padding: const EdgeInsets.all(5),
+                  shrinkWrap: true,
+                  itemCount: controller!.ads[keyword]!.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, index) {
+                    Ad ad = controller.ads[keyword]![index];
+                    return GestureDetector(
+                      onTap: () {
+                        //Navigator.of(context).pushNamed(DETAIL_UI);
+                        print("Routing to detail page");
+                      },
+                      child: ad.build(context),
+                    );
+                  },
+                ),
+              ),
+            );
+          }
+        }
+      },
     );
   }
 
@@ -339,7 +360,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: bottomNavBar(),
       floatingActionButton: fab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Container(
+      body: SizedBox(
         height: _height,
         width: _width,
         child: SingleChildScrollView(
@@ -349,13 +370,13 @@ class _HomePageState extends State<HomePage> {
               labelsGrid(),
               const Divider(),
               topicContainer("Cell-Phones", emptyFunction),
-              buildAdsList(controller.getAdsByKey("cellphones")),
+              buildAdsList("cellphone"),
               const Divider(),
               topicContainer("Computers", emptyFunction),
-              buildAdsList(controller.getAdsByKey("computer")),
+              buildAdsList("Computer"),
               const Divider(),
-              topicContainer("cellphones", emptyFunction),
-              buildAdsList(controller.getAdsByKey("cellphones")),
+              topicContainer("Apple", emptyFunction),
+              buildAdsList("Apple"),
             ],
           ),
         ),

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gadgethomeapp/constants/constants.dart';
+import 'package:gadgethome/constants/constants.dart';
 
 class AnimatedSplashScreen extends StatefulWidget {
   const AnimatedSplashScreen({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
   }
 
   void navigationPage() {
-    Navigator.of(context).pushReplacementNamed(MAIN_UI);
+    Navigator.of(context).pushReplacementNamed(LOGIN_SCREEN);
   }
 
   @override
@@ -67,7 +67,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'assets/images/logo.png',
+                'assets/images/main.png',
                 width: animation.value * 250,
                 height: animation.value * 250,
               ),
