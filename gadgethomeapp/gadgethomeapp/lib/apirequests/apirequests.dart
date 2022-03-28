@@ -100,7 +100,7 @@ Future<List<Ad>> getAdsByKeyword(String keyword, String token) async {
         },
       );
 
-      Uint8List image = jsonDecode(response.body);
+      Uint8List image = base64Decode(base64.encode(response.bodyBytes));
       ads[i].addImage(image);
     }
     print(ads.length);

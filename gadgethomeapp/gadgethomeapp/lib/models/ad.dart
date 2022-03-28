@@ -26,14 +26,14 @@ class Ad {
   factory Ad.fromJson(Map<String, dynamic> json) {
     return Ad(
         json['id'],
-        json['datePosted'],
+        DateTime.parse(json['datePosted']),
         json['model'],
         json['brand'],
         json['device'],
-        json['description'],
-        json['location'],
-        json['price'],
-        json['postedBy']);
+        json['description'] ?? "",
+        json['location'] ?? "",
+        json['amount'],
+        User.fromJson(json['owner']));
   }
 
   Map<String, dynamic> toJson() => {
@@ -45,7 +45,7 @@ class Ad {
         'description': description,
         'location': location,
         'price': price,
-        'postedBy': seller
+        'postedBy': seller.toJson()
       };
 
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class Ad {
                     children: <Widget>[
                       Flexible(
                         child: Text(
-                          price.toString(),
+                          "R${price}0",
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -137,7 +137,7 @@ class Ad {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              datePosted.toString(),
+                              DateUtils.dateOnly(datePosted).toString(),
                               style: TextStyle(fontSize: _height / 65),
                             ),
                             Row(

@@ -63,6 +63,7 @@ class UserProvider extends ChangeNotifier {
   Future<List<Ad>> getAdsByKey(String keyword) async {
     List<Ad> adsList = [];
     getAdsByKeyword(keyword, token).then((value) {
+      print("starting to fetch: $keyword");
       for (var ad in value) {
         adsList.add(ad);
       }
