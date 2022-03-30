@@ -144,26 +144,15 @@ Future<Ad> getAd(int id, String token) async {
   }
 }
 
-Future<bool> addPost(Ad ad, String token) async {
+Future<Map> addPost(Map ad, String token) async {
   var response = await http.post(Uri.parse("$API_URL/ads/posts"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
         "Content-Type": "application/json"
       },
-      body: jsonEncode(ad.toJson()));
+      body: jsonEncode(ad));
 
   print(response.body);
-
-  // Ad adResponse = Ad.fromJson(jsonDecode(response.body));
-
-  // for (Uint8List image in ad.images) {
-  //   response = await http.post(Uri.parse("$API_URL/images/posts"),
-  //       headers: {
-  //         HttpHeaders.authorizationHeader: "Bearer $token",
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: jsonEncode(image));
-  // }
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);

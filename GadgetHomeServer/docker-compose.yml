@@ -13,6 +13,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=tshiamo
       - SPRING_DATASOURCE_PASSWORD=T5h14m0
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8080:8080"
 
   db:
     build:

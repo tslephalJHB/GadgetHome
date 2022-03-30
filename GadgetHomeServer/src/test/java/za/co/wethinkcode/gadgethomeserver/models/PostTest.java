@@ -1,9 +1,10 @@
 package za.co.wethinkcode.gadgethomeserver.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,16 +12,32 @@ class PostTest {
     @Test
     void testConstructor() {
         Post actualPost = new Post();
+        actualPost.setAmount(10.0d);
         actualPost.setAvailable(true);
+        actualPost.setBrand("Brand");
+        LocalDate ofEpochDayResult = LocalDate.ofEpochDay(1L);
+        actualPost.setDatePosted(ofEpochDayResult);
         actualPost.setDescription("The characteristics of someone or something");
+        actualPost.setDevice("Device");
         actualPost.setId(123L);
-        assertNull(actualPost.getBrand());
-        assertNull(actualPost.getDatePosted());
+        actualPost.setModel("Model");
+        User user = new User();
+        user.setEmail("jane.doe@example.org");
+        user.setFirstName("Jane");
+        user.setLastName("Doe");
+        user.setNumber("42");
+        user.setPassword("iloveyou");
+        user.setRole("Role");
+        user.setUserName("janedoe");
+        actualPost.setOwner(user);
+        assertEquals(10.0d, actualPost.getAmount().doubleValue());
+        assertEquals("Brand", actualPost.getBrand());
+        assertSame(ofEpochDayResult, actualPost.getDatePosted());
         assertEquals("The characteristics of someone or something", actualPost.getDescription());
-        assertNull(actualPost.getDevice());
+        assertEquals("Device", actualPost.getDevice());
         assertEquals(123L, actualPost.getId().longValue());
-        assertNull(actualPost.getModel());
-        assertNull(actualPost.getOwner());
+        assertEquals("Model", actualPost.getModel());
+        assertSame(user, actualPost.getOwner());
         assertTrue(actualPost.isAvailable());
     }
 
@@ -30,14 +47,18 @@ class PostTest {
         user.setEmail("jane.doe@example.org");
         user.setFirstName("Jane");
         user.setLastName("Doe");
+        user.setNumber("42");
         user.setPassword("iloveyou");
         user.setRole("Role");
         user.setUserName("janedoe");
-        Post actualPost = new Post("Device", "Model", "Brand", "", user, 1.00);
+        Post actualPost = new Post("Device", "Model", "Brand", "The characteristics of someone or something", user, 10.0d);
 
-        assertEquals("Brand", actualPost.getBrand());
+        assertEquals(10.0d, actualPost.getAmount().doubleValue());
+        assertTrue(actualPost.isAvailable());
         assertSame(user, actualPost.getOwner());
         assertEquals("Model", actualPost.getModel());
+        assertEquals("Brand", actualPost.getBrand());
+        assertEquals("The characteristics of someone or something", actualPost.getDescription());
         assertEquals("Device", actualPost.getDevice());
     }
 }

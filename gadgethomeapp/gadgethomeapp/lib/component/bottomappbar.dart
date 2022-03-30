@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gadgethome/constants/constants.dart';
 
 class BottomNavAppBar extends StatelessWidget {
   const BottomNavAppBar({
@@ -21,7 +22,9 @@ class BottomNavAppBar extends StatelessWidget {
           children: <Widget>[
             IconButton(
               icon: const Icon(Icons.home),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, MAIN_UI);
+              },
             ),
             IconButton(
               icon: const Icon(Icons.message),

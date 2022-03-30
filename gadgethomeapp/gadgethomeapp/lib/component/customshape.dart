@@ -58,3 +58,37 @@ class CustomShapeClipper3 extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper oldClipper) => true;
 }
+
+class Clip extends StatelessWidget {
+  const Clip({
+    Key? key,
+    required double height,
+    required this.opacity,
+    required this.denominator,
+    required this.clipper,
+  })  : _height = height,
+        super(key: key);
+
+  final double _height;
+  final double opacity;
+  final double denominator;
+  final CustomClipper<Path> clipper;
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: opacity,
+      child: ClipPath(
+        clipper: clipper,
+        child: Container(
+          height: _height / denominator,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.orange, Colors.pinkAccent],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

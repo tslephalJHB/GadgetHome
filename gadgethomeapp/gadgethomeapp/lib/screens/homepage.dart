@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gadgethome/component/adlist.dart';
 import 'package:gadgethome/component/bottomappbar.dart';
 import 'package:gadgethome/component/customshape.dart';
 import 'package:gadgethome/component/gadgetdrawer.dart';
+import 'package:gadgethome/constants/constants.dart';
 import 'package:gadgethome/controllers/userprovider.dart';
 import 'package:gadgethome/models/ad.dart';
+import 'package:gadgethome/screens/searchscreen.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 
@@ -21,10 +24,14 @@ class _HomePageState extends State<HomePage> {
 
   bool isExpanded = false;
 
+  final searchController = TextEditingController();
+
   Widget fab() {
     return FloatingActionButton.extended(
       elevation: 3,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, ADD_POST);
+      },
       backgroundColor: Colors.orange[200],
       icon: const Icon(Icons.camera_alt),
       label: const Text(
@@ -40,7 +47,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void emptyFunction() {}
+  void emptyFunction(String topic) {
+    Navigator.pushNamed(context, SEARCH_SCREEN, arguments: topic);
+  }
 
   Widget labelsGrid() {
     return GridView.count(
@@ -48,15 +57,30 @@ class _HomePageState extends State<HomePage> {
       shrinkWrap: true,
       crossAxisCount: 4,
       children: <Widget>[
-        electronicsLabel("assets/icons/apple_icon.png", "Apple", () {}),
-        electronicsLabel("assets/icons/camera_icon.png", "Cameras", () {}),
-        electronicsLabel(
-            "assets/icons/cell_phone_icon.png", "Cell Phones", () {}),
-        electronicsLabel("assets/icons/computer_icon.png", "Computers", () {}),
-        electronicsLabel("assets/icons/laptop_icon.png", "Laptops", () {}),
-        electronicsLabel("assets/icons/samsung_icon.png", "Samsung", () {}),
-        electronicsLabel("assets/icons/tablet_icon.png", "Tablets", () {}),
-        electronicsLabel("assets/icons/tv_icon.png", "Televisions", () {})
+        electronicsLabel("assets/icons/apple_icon.png", "Apple", () {
+          emptyFunction("apple");
+        }),
+        electronicsLabel("assets/icons/camera_icon.png", "Cameras", () {
+          emptyFunction("camera");
+        }),
+        electronicsLabel("assets/icons/cell_phone_icon.png", "Cell Phones", () {
+          emptyFunction("cellphone");
+        }),
+        electronicsLabel("assets/icons/computer_icon.png", "Computers", () {
+          emptyFunction("computer");
+        }),
+        electronicsLabel("assets/icons/laptop_icon.png", "Laptops", () {
+          emptyFunction("laptop");
+        }),
+        electronicsLabel("assets/icons/samsung_icon.png", "Samsung", () {
+          emptyFunction("samsung");
+        }),
+        electronicsLabel("assets/icons/tablet_icon.png", "Tablets", () {
+          emptyFunction("tablet");
+        }),
+        electronicsLabel("assets/icons/tv_icon.png", "Televisions", () {
+          emptyFunction("television");
+        })
       ],
     );
   }
@@ -85,59 +109,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget builAd(BuildContext context, int index, List<Ad> listItem) {
-    Ad ad = listItem[index];
-    return GestureDetector(
-        onTap: () {
-          //Navigator.of(context).pushNamed(DETAIL_UI);
-          print("Routing to detail page");
-        },
-        child: ad.build(context));
-  }
-
-  Widget buildAdsList(String keyword, Future<List<Ad>> provider) {
-    return FutureBuilder(
-      future: provider,
-      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          if (snapshot.error != null) {
-            return const Center(
-              child: Text("Failed to load"),
-            );
-          } else {
-            return SizedBox(
-              height: _height / 4.25,
-              child: Consumer<UserProvider>(
-                builder: (context, controller, child) => ListView.builder(
-                  padding: const EdgeInsets.all(5),
-                  shrinkWrap: true,
-                  itemCount: controller.ads[keyword] == null
-                      ? 0
-                      : controller.ads[keyword]!.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    Ad ad = controller.ads[keyword]![index];
-                    return GestureDetector(
-                      onTap: () {
-                        //Navigator.of(context).pushNamed(DETAIL_UI);
-                        print("Routing to detail page");
-                      },
-                      child: ad.build(context),
-                    );
-                  },
-                ),
-              ),
-            );
-          }
-        }
-      },
-    );
-  }
-
   Widget topicContainer(String topic, void Function() onTap) {
     return Container(
       margin: const EdgeInsets.only(left: 30, right: 30, top: 10),
@@ -159,29 +130,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget clip(double opacity, double denominator, CustomClipper<Path> clipper) {
-    return Opacity(
-      opacity: opacity,
-      child: ClipPath(
-        clipper: clipper,
-        child: Container(
-          height: _height / denominator,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.orange, Colors.pinkAccent],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget clipShape() {
     return Stack(
       children: <Widget>[
-        clip(0.75, 3, CustomShapeClipper()),
-        clip(0.5, 3.5, CustomShapeClipper2()),
-        clip(0.25, 3, CustomShapeClipper3()),
+        Clip(
+            height: _height,
+            opacity: 0.75,
+            denominator: 3,
+            clipper: CustomShapeClipper()),
+        Clip(
+            height: _height,
+            opacity: 0.5,
+            denominator: 3.5,
+            clipper: CustomShapeClipper2()),
+        Clip(
+            height: _height,
+            opacity: 0.25,
+            denominator: 3,
+            clipper: CustomShapeClipper3()),
         Container(
           margin: EdgeInsets.only(left: 40, right: 40, top: _height / 3.75),
           child: Material(
@@ -189,12 +155,22 @@ class _HomePageState extends State<HomePage> {
             elevation: 8,
             child: Container(
               child: TextFormField(
+                controller: searchController,
                 cursorColor: Colors.orange[200],
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10),
-                  prefixIcon:
-                      Icon(Icons.search, color: Colors.orange[200], size: 30),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.orange[200],
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, SEARCH_SCREEN,
+                          arguments: searchController.text);
+                    },
+                  ),
                   hintText: "What're you looking for?",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -303,14 +279,34 @@ class _HomePageState extends State<HomePage> {
               clipShape(),
               labelsGrid(),
               const Divider(),
-              topicContainer("Cell-Phones", emptyFunction),
-              buildAdsList("cellphone", controller.getAdsByKey("cellphone")),
+              topicContainer("Cell-Phones", () {
+                Navigator.pushNamed(context, SEARCH_SCREEN,
+                    arguments: "cellphone");
+              }),
+              AdList(
+                  height: _height / 4,
+                  keyword: "cellphone",
+                  provider: controller.getAdsByKey("cellphone"),
+                  direction: Axis.horizontal),
               const Divider(),
-              topicContainer("Computers", emptyFunction),
-              buildAdsList("Computer", controller.getAdsByKey("Computer")),
+              topicContainer("Computers", () {
+                Navigator.pushNamed(context, SEARCH_SCREEN,
+                    arguments: "computer");
+              }),
+              AdList(
+                  height: _height / 4,
+                  keyword: "Computer",
+                  provider: controller.getAdsByKey("Computer"),
+                  direction: Axis.horizontal),
               const Divider(),
-              topicContainer("Apple", emptyFunction),
-              buildAdsList("Apple", controller.getAdsByKey("Apple")),
+              topicContainer("Apple", () {
+                Navigator.pushNamed(context, SEARCH_SCREEN, arguments: "apple");
+              }),
+              AdList(
+                  height: _height / 4,
+                  keyword: "Apple",
+                  provider: controller.getAdsByKey("Apple"),
+                  direction: Axis.horizontal),
             ],
           ),
         ),

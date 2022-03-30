@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gadgethome/component/customshape.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
@@ -11,33 +12,31 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
+    return SizedBox(
+      width: size.width,
       height: size.height,
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
         children: <Widget>[
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Image.asset("assets/images/top1.png", width: size.width),
+          Stack(
+            children: [
+              Clip(
+                  height: size.height,
+                  opacity: 0.75,
+                  denominator: 3,
+                  clipper: CustomShapeClipper()),
+              Clip(
+                  height: size.height,
+                  opacity: 0.5,
+                  denominator: 3.5,
+                  clipper: CustomShapeClipper2()),
+              Clip(
+                  height: size.height,
+                  opacity: 0.25,
+                  denominator: 3,
+                  clipper: CustomShapeClipper3()),
+            ],
           ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Image.asset("assets/images/top2.png", width: size.width),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Image.asset("assets/images/bottom1.png", width: size.width),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Image.asset("assets/images/bottom2.png", width: size.width),
-          ),
-          SingleChildScrollView(child: child)
+          child
         ],
       ),
     );

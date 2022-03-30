@@ -81,4 +81,17 @@ class UserProvider extends ChangeNotifier {
 
     return ad;
   }
+
+  Future<bool> postAd(Map ad) {
+    Map response = {};
+    int id;
+    return addPost(ad, token).then((value) {
+      response.addAll(value);
+      if (response["id"] != null) {
+        id = response["id"];
+        return true;
+      }
+      return false;
+    });
+  }
 }
