@@ -28,4 +28,8 @@ public class OrderService {
         Order order = orderRepo.getById(Long.valueOf(id));
         return order.getTransit();
     }
+
+    public List<Order> getOrdersByBuyer(User buyer) {
+        orderRepo.getOrdersByBuyer(buyer);
+    }
 }
