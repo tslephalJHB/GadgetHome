@@ -6,7 +6,7 @@ docker:
 	sudo chown $(USER) /var/run/docker.sock
 	docker login -u tshiamolephale -p 4Ff3ct!0n4t3
 	sudo docker build -t tshiamolephale/gadgethomeserver .
-	sudo docker push gitlab.wethinkco.de:5050/tslephal/gadgethome
+	sudo docker push tshiamolephale/gadgethomeserver
 	docker logout
 
 drelease:

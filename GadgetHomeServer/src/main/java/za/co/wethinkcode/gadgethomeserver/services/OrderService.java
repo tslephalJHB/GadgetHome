@@ -1,8 +1,11 @@
 package za.co.wethinkcode.gadgethomeserver.services;
 
 import org.springframework.stereotype.Service;
+import za.co.wethinkcode.gadgethomeserver.models.User;
 import za.co.wethinkcode.gadgethomeserver.models.Order;
 import za.co.wethinkcode.gadgethomeserver.repository.OrderRepository;
+
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -29,7 +32,7 @@ public class OrderService {
         return order.getTransit();
     }
 
-    public List<Order> getOrdersByBuyer(User buyer) {
-        orderRepo.getOrdersByBuyer(buyer);
-    }
+    // public List<Order> getOrdersByBuyer(User buyer) {
+    //     orderRepo.getOrdersByBuyer(buyer);
+    // }
 }

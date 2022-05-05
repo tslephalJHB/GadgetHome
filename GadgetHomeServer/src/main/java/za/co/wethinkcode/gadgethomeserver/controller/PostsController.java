@@ -49,7 +49,7 @@ public class PostsController {
         }
     }
 
-    @PostMapping("/posts")
+    @PostMapping("/post")
     public Post addPost(@RequestBody Map<String, String> map) {
         Authentication authentication = SecurityContextHolder
                 .getContext().getAuthentication();

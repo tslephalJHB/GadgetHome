@@ -25,6 +25,7 @@ import java.util.Map;
 //        .getContext().getAuthentication();
 //        String username = authentication.getName();
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -91,6 +92,7 @@ public class AuthenticationController {
         user.setFirstName(map.get("first_name"));
         user.setLastName(map.get("last_name"));
         user.setEmail(map.get("email"));
+        user.setNumber(map.get("number"));
         user.setPassword(new BCryptPasswordEncoder().encode(map.get("password")));
         user.setRole("USER");
         user.setUserName(userName);
