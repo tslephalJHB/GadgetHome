@@ -3,6 +3,7 @@ package za.co.wethinkcode.gadgethomeserver.controller;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +37,7 @@ public class PictureController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+        headers.setContentType(MediaType.IMAGE_JPEG);
 
         Picture image = service.getImages(post).get(0);
 
